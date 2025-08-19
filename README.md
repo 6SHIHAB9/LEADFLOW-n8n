@@ -89,6 +89,7 @@ This project demonstrates how to automate lead management like a **real-world Sa
 It reduces manual work, ensures clean data, and gives sales teams valid enriched leads in real-time.  
 ---
 
-**The json of the workflow is available on workflow.json**
+**The json of the workflow is available on workflow.json**.
+
 **Screenshot of the workflow is availabe on the screenshots.md**
 
