@@ -1,0 +1,235 @@
+{
+  "name": "CRM PROJECT 1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "6638e4a2-ea6c-44bf-ad15-6caf5c65ee1e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-1632, -80],
+      "id": "9d7ab069-5547-4b4c-9a91-57291312a558",
+      "name": "Webhook",
+      "webhookId": "6638e4a2-ea6c-44bf-ad15-6caf5c65ee1e"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"Name\":\"Ahammed Sameer\",\n  \"Email\":\"ahammed24@gmail.com\",\n  \"Phone Number\":7529329832,\n  \"Company Name\":\"Fin Finance\",\n  \"Job Title\":\"CEO\",\n  \"Interests\":\"Collaboration\",\n  \"Country\":\"INDIA\",\n  \"Message\":\"I am looking to collabrate with your company\",\n  \"Company Domain\":\"finfinance.com\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [-1280, 144],
+      "id": "69199ad7-ed33-42a2-9d0d-fc38e73b4649",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "= {{ $json.body.pretty }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a information extractor your job is to extract human readable data from user input and give output as per output parser.\n\nONLY PUT HUMAN READABLE TEXTS AS OUTPUT\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [-1424, -80],
+      "id": "796af9a4-de55-4404-bad3-026255d220b2",
+      "name": "DATA EXTRACTOR"
+    },
+    {
+      "parameters": {
+        "url": "=https://emailreputation.abstractapi.com/v1/?api_key={{YOUR_API_KEY}}&email={{ $('DATA EXTRACTOR').item.json.output.Email }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-816, -80],
+      "id": "86fcdf27-a984-484c-b899-3c098d491fd2",
+      "name": "EMAIL VALIDATOR"
+    },
+    {
+      "parameters": {
+        "url": "=https://companyenrichment.abstractapi.com/v2/?api_key={{YOUR_API_KEY}}&domain=google.com",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-592, -80],
+      "id": "025dd80e-f207-4b15-b24c-9e2beadfe9df",
+      "name": "COMPANY ENRICHMENT"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8cc54b3c-d049-432f-b48e-0c2493a10b9d",
+              "leftValue": "={{ $('EMAIL VALIDATOR').item.json.email_deliverability.status }}",
+              "rightValue": "deliverable",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "6fb599eb-008a-473a-af90-09e282087b5b",
+              "leftValue": "={{ $json.company_name }}",
+              "rightValue": "null",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-336, -80],
+      "id": "f7526e21-201a-4bdd-ab53-b3b5822528f8",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [-32, 96],
+      "id": "2c3f423a-1144-4383-9bbf-059fe354b277",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": "11E0dP-ji9bBRFSV0CptrH5VRTQt-5V8Wj_qCeOB9inI",
+        "sheetName": "gid=0",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "NAME": "={{ $json.output.Name }}",
+            "EMAIL": "={{ $json.output.Email }}",
+            "PHONE NUMBER": "={{ $json.output['Phone Number'] }}",
+            "COMPANY NAME": "={{ $json.output['Company Name'] }}",
+            "JOB TITLE": "={{ $json.output['Job Title'] }}",
+            "INTEREST": "={{ $json.output.Interests }}",
+            "COUNTRY": "={{ $json.output.Country }}",
+            "NOTES": "={{ $json.output.Message }}",
+            "Company Domain": "={{ $json.output['Company Domain'] }}"
+          }
+        },
+        "options": {
+          "useAppend": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [-1072, -80],
+      "id": "50c87120-509f-419e-9b32-64340ba5b8b1",
+      "name": "Database"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": "appCP7rU3zStbXHKv",
+        "table": "tblDOftIljRobzPQN",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('DATA EXTRACTOR').item.json.output.Name }}",
+            "Email": "={{ $('DATA EXTRACTOR').item.json.output.Email }}",
+            "Phone Number": "={{ $('DATA EXTRACTOR').item.json.output['Phone Number'] }}",
+            "Job title": "={{ $('DATA EXTRACTOR').item.json.output['Job Title'] }}",
+            "Interest": "={{ $('DATA EXTRACTOR').item.json.output.Interests }}",
+            "Employee count": "={{ $('COMPANY ENRICHMENT').item.json.employee_count }}",
+            "Message": "={{ $('DATA EXTRACTOR').item.json.output.Message }}",
+            "Company Name": "={{ $('COMPANY ENRICHMENT').item.json.company_name }}",
+            "Domain": "={{ $('COMPANY ENRICHMENT').item.json.domain }}",
+            "City": "={{ $('COMPANY ENRICHMENT').item.json.city }}",
+            "Country": "={{ $('COMPANY ENRICHMENT').item.json.country }}",
+            "Industry": "={{ $('COMPANY ENRICHMENT').item.json.industry }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [-48, -224],
+      "id": "252fa1f6-1b20-457a-af74-bc9e9e7a818d",
+      "name": "Airtable: Add Valid Lead"
+    },
+    {
+      "parameters": {
+        "model": "deepseek/deepseek-chat-v3-0324:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [-1424, 144],
+      "id": "fb77e741-f586-4435-baf7-5ee898c55494",
+      "name": "model"
+    },
+    {
+      "parameters": {
+        "chatId": "",
+        "text": "=🔔 <b>New Lead Captured!</b>\n👤 <b>Name:</b> {{ $json.fields.Name }}\n💌 <b>Email:</b> {{ $json.fields.Email }}\n🏢 <b>Company:</b> {{ $json.fields['Company Name'] }}\n🎯 <b>Job Title:</b> {{ $json.fields['Job title'] }}\n🌍 <b>Country:</b> {{ $json.fields.Country }}\n📊 <b>Industry:</b> {{ $json.fields.Industry }}\n👥 <b>Employees:</b> {{ $json.fields['Employee count'] }}\n📝 <b>Message:</b> {{ $json.fields.Message }}\n⏰ <b>Captured At:</b> {{ $now }}\n",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [160, -224],
+      "id": "8835400d-8a34-4e4c-b71e-61099f1ccaec",
+      "name": "Sends the valid lead to sale team through a bot"
+    },
+    {
+      "parameters": {
+        "content": "Webhook\n➝ “Catches incoming form submissions / new leads in real-time.”\n\nData Extractor\n➝ “AI parses messy text → clean structured fields (Name, Email, Company, etc.).”\n\nGoogle Sheet (Database)\n➝ “Stores every raw lead for backup & tracking.”\n\nEmail Validator\n➝ “Checks if the email is real and safe to use.”\n\nCompany Enrichment\n➝ “Adds extra info about the lead’s company (website, size, industry).”\n\nIF Node\n➝ “Only push valid leads forward. Invalid = ignored.”\n\nAirtable\n➝ “Central CRM hub where enriched valid leads live.”\n\nTelegram Bot\n➝ “Alerts the sales team instantly — no waiting, no manual work.”\n\nNo Operation\n➝ “Stops invalid leads from polluting the system.”",
+        "height": 528,
+        "width": 816,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [-1136, -640],
+      "typeVersion": 1,
+      "id": "1a2ee1b4-645a-44b2-aac2-4ae63b3abd49",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": { "main": [[{ "node": "DATA EXTRACTOR", "type": "main", "index": 0 }]] },
+    "Structured Output Parser": { "ai_outputParser": [[{ "node": "DATA EXTRACTOR", "type": "ai_outputParser", "index": 0 }]] },
+    "DATA EXTRACTOR": { "main": [[{ "node": "Database", "type": "main", "index": 0 }]] },
+    "EMAIL VALIDATOR": { "main": [[{ "node": "COMPANY ENRICHMENT", "type": "main", "index": 0 }]] },
+    "COMPANY ENRICHMENT": { "main": [[{ "node": "If", "type": "main", "index": 0 }]] },
+    "If": {
+      "main": [
+        [{ "node": "Airtable: Add Valid Lead", "type": "main", "index": 0 }],
+        [{ "node": "No Operation, do nothing", "type": "main", "index": 0 }]
+      ]
+    },
+    "Database": { "main": [[{ "node": "EMAIL VALIDATOR", "type": "main", "index": 0 }]] },
+    "Airtable: Add Valid Lead": { "main": [[{ "node": "Sends the valid lead to sale team through a bot", "type": "main", "index": 0 }]] },
+    "model": { "ai_languageModel": [[{ "node": "DATA EXTRACTOR", "type": "ai_languageModel", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "66a40c0f-257d-44e8-9091-44bdd9f225ca",
+  "meta": { "templateCredsSetupCompleted": true, "instanceId": "4296d27a14ca09fe198423f2c64358629742b7e64781a34de7c8c97820eb34b8" },
+  "id": "d9YGoG2HDffYHpkd",
+  "tags": []
+}
