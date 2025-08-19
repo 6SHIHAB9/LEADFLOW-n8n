@@ -27,7 +27,7 @@ It captures leads from forms, cleans & validates the data, enriches it with comp
      "Name": "Rohit Mehra",
      "Email": "rohit.mehra@gmail.com",
      "Phone Number": "9876543210",
-     "Company Name": "PayVerse",
+     "Company Name": "github",
      "Job Title": "Co-Founder & CEO",
      "Interests": "Partnerships/Collaborations",
      "Country": "India",
