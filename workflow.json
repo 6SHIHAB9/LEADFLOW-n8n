@@ -52,7 +52,7 @@
     },
     {
       "parameters": {
-        "url": "=https://companyenrichment.abstractapi.com/v2/?api_key={{YOUR_API_KEY}}&domain=google.com",
+        "url": "=https://companyenrichment.abstractapi.com/v2/?api_key={{YOUR_API_KEY}}&domain={{ $('DATA EXTRACTOR').item.json.output['Company Domain'] }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -233,3 +233,4 @@
   "id": "d9YGoG2HDffYHpkd",
   "tags": []
 }
+
