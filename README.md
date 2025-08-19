@@ -23,17 +23,17 @@ It captures leads from forms, cleans & validates the data, enriches it with comp
 2. **Data Extractor (AI Parsing)**  
    - Extracts clean structured fields like:
      ```json
-    {
-    "Name": "Rohit Mehra",
-    "Email": "rohit.mehra@payverse.com",
-    "Phone Number": "+91-9876543210",
-    "Company Name": "PayVerse",
-    "Job Title": "Co-Founder & CEO",
-    "Interests": "Partnerships & Collaborations",
-    "Country": "India",
-    "Message": "Looking to explore potential fintech collaborations",
-    "Company Domain": "payverse.com"
-  }
+     {
+     "Name": "Rohit Mehra",
+     "Email": "rohit.mehra@gmail.com",
+     "Phone Number": "9876543210",
+     "Company Name": "PayVerse",
+     "Job Title": "Co-Founder & CEO",
+     "Interests": "Partnerships & Collaborations",
+     "Country": "India",
+     "Message": "Looking to explore potential fintech collaborations",
+     "Company Domain": "github.com"
+     }
 
      ```
 
