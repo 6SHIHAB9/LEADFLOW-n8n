@@ -29,7 +29,7 @@ It captures leads from forms, cleans & validates the data, enriches it with comp
      "Phone Number": "9876543210",
      "Company Name": "PayVerse",
      "Job Title": "Co-Founder & CEO",
-     "Interests": "Partnerships & Collaborations",
+     "Interests": "Partnerships/Collaborations",
      "Country": "India",
      "Message": "Looking to explore potential fintech collaborations",
      "Company Domain": "github.com"
