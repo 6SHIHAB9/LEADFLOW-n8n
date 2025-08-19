@@ -30,7 +30,7 @@
         "text": "= {{ $json.body.pretty }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "You are a information extractor your job is to extract human readable data from user input and give output as per output parser.\n\nONLY PUT HUMAN READABLE TEXTS AS OUTPUT\n"
+          "systemMessage": "You are a information extractor your job is to extract human readable data from user input and give output as per output parser.\n\nONLY PUT HUMAN READABLE TEXTS AS OUTPUT ON MESSAGE\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -233,4 +233,5 @@
   "id": "d9YGoG2HDffYHpkd",
   "tags": []
 }
+
 
