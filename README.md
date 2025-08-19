@@ -93,3 +93,5 @@ It reduces manual work, ensures clean data, and gives sales teams valid enriched
 
 **Screenshot of the workflow is availabe on the screenshot.md**
 
+**An example execution is uploaded on example.md**
+
