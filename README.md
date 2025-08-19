@@ -91,5 +91,5 @@ It reduces manual work, ensures clean data, and gives sales teams valid enriched
 
 **The json of the workflow is available on workflow.json**.
 
-**Screenshot of the workflow is availabe on the screenshots.md**
+**Screenshot of the workflow is availabe on the screenshot.md**
 
